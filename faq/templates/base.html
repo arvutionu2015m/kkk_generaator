@@ -1,0 +1,90 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KKK Generaator{% endblock %}</title>
+
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Lisa oma stiilid -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">KKK Generaator</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Avaleht</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'generate_faq' %}">Genereeri KKK</a></li>
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logi välja</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Logi sisse</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Loo konto</a></li>
+                    {% endif %}
+                    {% if user.is_superuser %}
+<li class="nav-item"><a class="nav-link" href="{% url 'admin_review_faqs' %}">KKK kinnitused</a></li>
+{% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Teavitused -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Sisu -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light text-center py-3">
+        <small>&copy; {{ year|default:"2025" }} Arno Punnar – KKK süsteem</small>
+    </footer>
+
+    <!-- Bootstrap 4 JS ja jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("select-all");
+        const faqCheckboxes = document.querySelectorAll("input[name='selected_faqs']");
+    
+        if (selectAllCheckbox) {
+          selectAllCheckbox.addEventListener("change", function () {
+            faqCheckboxes.forEach(function (checkbox) {
+              checkbox.checked = selectAllCheckbox.checked;
+            });
+          });
+        }
+      });
+    </script>
+    {% endblock %}
+
+</body>
+</html>

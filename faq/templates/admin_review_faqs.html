@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Admin – Kinnitust ootavad KKK-d{% endblock %}
+
+{% block content %}
+<h3>Kinnitust ootavad KKK-d</h3>
+
+{% if faqs %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="text-right mb-3">
+      <button type="submit" class="btn btn-success">✅ Kinnita valitud</button>
+    </div>
+
+    {% for faq in faqs %}
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="select-all">
+      <label class="form-check-label font-weight-bold" for="select-all">
+        Vali kõik
+      </label>
+    </div>
+    
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="selected_faqs" value="{{ faq.id }}" id="faq{{ faq.id }}">
+            <label class="form-check-label" for="faq{{ faq.id }}">
+              <strong>{{ faq.question }}</strong>
+            </label>
+          </div>
+          <p class="card-text">{{ faq.answer }}</p>
+          {% if faq.image %}
+            <img src="{{ faq.image.url }}" class="img-fluid rounded mb-2" alt="FAQ pilt">
+          {% endif %}
+          <a href="{% url 'delete_faq' faq.id %}" class="btn btn-danger btn-sm">Kustuta</a>
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="text-right mb-5">
+      <button type="submit" class="btn btn-success">✅ Kinnita valitud</button>
+    </div>
+  </form>
+{% else %}
+  <div class="alert alert-info">Hetkel pole kinnitamata KKK-sid.</div>
+{% endif %}
+{% endblock %}

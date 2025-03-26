@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Genereeri KKK – KKK Generaator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Genereeri korduma kippuvad küsimused</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    
+                    <div class="form-group">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger">{{ form.description.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Sisesta toote või teenuse kirjeldus. ChatGPT koostab selle põhjal 5 KKK-d.
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-magic"></i> Genereeri KKK
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

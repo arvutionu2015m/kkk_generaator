@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>KKK</h2>
+{% for faq in faqs %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ faq.question }}</h5>
+      <p class="card-text">{{ faq.answer }}</p>
+      {% if faq.image %}
+        <img src="{{ faq.image.url }}" class="img-fluid">
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}
